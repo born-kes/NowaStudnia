@@ -33,6 +33,7 @@ function sql_query($zap){
  *	// echo count($from).print_r($from).BR;
  *
  */
+# pobiera tablice i sp³aszcza j¹ 
 function select($from,$separator=',',$efekt=''){
 if(is_array($from)){
 //Sprawdza czy $from niejest zagniezdzone
@@ -53,6 +54,7 @@ if(is_array($from)){
   }
   return przedrostek($from,$select);
 }
+# generuje 'left join '.$name.'	ON '.$zaczep.'='.przedrostek( $name,$where)'
 function buduj_left_join($zaczep,$left_join,$str=''){
  if(is_array($left_join) )
 	foreach($left_join AS $name => $where)
@@ -60,6 +62,7 @@ function buduj_left_join($zaczep,$left_join,$str=''){
 			$str .=' left join '.$name.'	ON '.$zaczep.'='.przedrostek( $name,$where).br;
  return $str;
 }
+# Montuje w zapytaniu $argument1.$separator .$argument2
 function where($argument1, $argument2, $separator='='){
 	$argument1 = select($argument1,'');
 	if(!is_numeric($argument2) )
@@ -67,6 +70,7 @@ function where($argument1, $argument2, $separator='='){
 
 	return $argument1.$separator .$argument2;
 }
+# Generuje du¿e zapytania
 function sql_dopasuj_zap($from_select,$where, $left_join='',$zap=''){
  if(is_array($from_select) ){
  	foreach($from_select AS $from => $select)
@@ -77,9 +81,6 @@ function sql_dopasuj_zap($from_select,$where, $left_join='',$zap=''){
 		$SELECT=select($from_select+$left_join[0]);
 	else
 		$SELECT=select($from_select);
-
-	
- 
 $zap=''.  
 'SELECT '.$SELECT
  .br.
@@ -92,6 +93,7 @@ if(isset($where) ) $zap.=
 }
 return $zap;
 }
+# generuje podstawowe zapytania do raportów
 function raport($where,$typ='all'){
 $BD = array('raport'=>1,
 			'mobile'=>1,
@@ -130,7 +132,9 @@ $BD = array('raport'=>1,
 		break;
 					if(! function_exists('function_name_'.$typ) ) 	return false;	*/
 }
-function sql_zap_raport_all($id){ if(!is_numeric($id) )return;
+# generuje wielo poziomowe zapytanie do wszystkich tablic
+function sql_zap_raport_all($id){
+ if(!is_numeric($id) )return;
 $id=(int)$id;
 return sql_dopasuj_zap(
 				array( // zmienic nazwa pola data
@@ -159,6 +163,7 @@ return sql_dopasuj_zap(
 					)
 				);
 }
+# generuje INSERT INTO albo UPDATE 
 function zap_Nowy_wpis($form, $value=Array(), $nowy=true){
 if(!isset($form) ) return;
 	$from = 'ws_'.$form;
@@ -180,10 +185,11 @@ if( !isset($value['id']) && $nowy)
   echo  $zapytanie;            
 // Spis wymaganych pol;
 }
+# generuje nowy wpis do tabeli opis
 function zap_opis($str){
  return zap_Nowy_wpis('opis' , Array( 'opis' => $str) );
 }
-
+# sprawdza czy jest tyle samo danych i pól do zapisania oraz ich gettype
 function test_zgododnosci($dane,$pola){
 if(count($dane) == count($pola) )
 	foreach($pola AS $nazwa => $wartosc)
@@ -193,17 +199,14 @@ if(count($dane) == count($pola) )
 return false;
 }
 		// sprawdziæ null jaki zwraca gettype 
-		
+# generuje bezpieczne zapytania
 function drukowanie_tablicy($arry,$array=''){
 foreach($arry AS $name => $value)
 	$array[]="`$name` = ".(!is_numeric($value) ? "'".addslashes($value)."'": "'".$value."'");
  return splaszcz($array);
 }
-
-# -- Function upDate() w bazie aktualizuje tylko datê
+# Function upDate() w bazie aktualizuje tylko datê
 function upDate( $name ){
-
 return isset($name)?//	return sql_query()
-	zap_Nowy_wpis($name , Array() , false):'no';
-			 
+	zap_Nowy_wpis($name , Array() , false):'';		 
 }
