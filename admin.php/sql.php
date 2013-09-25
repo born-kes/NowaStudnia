@@ -1,9 +1,6 @@
 <?php
-
-//define('' ,'``');
-//define('' ,'``');
-//define('' ,'``');
 /* 
+//define('' ,'``');
 sql_dopasuj_zap(	Arry (Nazwa Tablicy=> NazwaKolumny,NazwaKolumny,...),
 					array(
 					where('ws_wsi'=>'id',$GET['id'],$porownanie) // domyslnie $porownanie '='
@@ -27,11 +24,16 @@ function sql_query($zap){
 	$efekt = @mysql_fetch_array($result);
 	return $efekt;
 }
-// function => f-cia.php
-// function przedrostek($from,$arry,$styk='.')	np. return "$from . $arry[1]"
-// function splaszcz($arry,$separator=',') 		np. return "$arry[0],$arry[1]"...
 
-function select($from,$separator=',',$efekt=''){//echo count($from).print_r($from).BR;
+
+
+/*	// function => f-cia.php
+ *	// function przedrostek($from,$arry,$styk='.')	np. return "$from . $arry[1]"
+ *	// function splaszcz($arry,$separator=',') 		np. return "$arry[0],$arry[1]"...
+ *	// echo count($from).print_r($from).BR;
+ *
+ */
+function select($from,$separator=',',$efekt=''){
 if(is_array($from)){
 //Sprawdza czy $from niejest zagniezdzone
 
@@ -157,21 +159,23 @@ return sql_dopasuj_zap(
 					)
 				);
 }
-function zap_Nowy_wpis($from, $value, $nowy=true){
+function zap_Nowy_wpis($form, $value=Array(), $nowy=true){
 if(!isset($form) ) return;
-	$form = 'ws_'.$form;
-	
+	$from = 'ws_'.$form;
+
 global $GET;
 if(	!isset($GET['id'])  || !is_numeric($GET['id']) ) return;
-if(	!isset($GET['data'])  ) return;
+if(	!isset($GET['data'])  ) $GET['data']=Data();
 
 if( !is_array($value)) return false;
-	$value['data_'.$from]=$GET['data'];
+	$value['data_'.$form]=$GET['data'];
+if( !isset($value['id']) && $nowy)
+	$value['id']=$GET['id'];
 	
 	if($nowy)
 		$zapytanie = "INSERT INTO ".$from." SET ".drukowanie_tablicy($value);
 	else	
-        $zapytanie = "UPDATE ".$from." SET ".drukowanie_tablicy($value). "Where id=".$value['id'];
+        $zapytanie = "UPDATE ".$from." SET ".drukowanie_tablicy($value). " Where id=".$GET['id'];
 
   echo  $zapytanie;            
 // Spis wymaganych pol;
@@ -192,7 +196,14 @@ return false;
 		
 function drukowanie_tablicy($arry,$array=''){
 foreach($arry AS $name => $value)
-	$array[]="`$name` = ".(!is_numeric($value) ? "'".addslashes($value)."'": $value);
+	$array[]="`$name` = ".(!is_numeric($value) ? "'".addslashes($value)."'": "'".$value."'");
  return splaszcz($array);
 }
 
+# -- Function upDate() w bazie aktualizuje tylko datê
+function upDate( $name ){
+
+return isset($name)?//	return sql_query()
+	zap_Nowy_wpis($name , Array() , false):'no';
+			 
+}
