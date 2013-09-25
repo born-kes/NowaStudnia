@@ -1,12 +1,5 @@
 <?php
-/* Tworzenie $GET zawieraj¹cego POST i GET */
-if( is_array($_REQUEST) ){
- $GET = $_REQUEST;
-	if( isset($_REQUEST['q']) )
-	@list($GET['plik'], $GET['typ'], $GET['dane'], $GET['costam']) = explode("/" , $_REQUEST['q']);
-	if( isset($_REQUEST['data']) )
-	$GET['data'] = Data($GET['data']);
-	}
+
 function test($if , $war = false){
 //if(!$war);
 return $if? ' jest = true' : ' niema = false';
@@ -15,9 +8,9 @@ function aut_null($arra){
 if(! isset($arra) ) return;
 if(! is_array($arra) ) return arra;
 $nowaArra=null;
- foreach($arra as $test => $vall){ if($vall !=NULL) $nowaArra[$test] = $vall; }
+ foreach($arra as $test => $vall){ if( !is_null($vall) ) $nowaArra[$test] = $vall; }
  return $nowaArra;
-}$GET =  aut_null($GET);
+}
 
 function json($arra ){ if( !is_array($arra) )return;
  $str= '{';
@@ -82,11 +75,21 @@ function Data2Nowsza($data1=0,$data2=0){
 return (strtotime($data1)<strtotime($data2));
 }
 function Data($data= null ){//  mktime($da[3],$da[4],$da[5],$da[1],$da[0],$da[2])= split("[ .:-]", $data);
-	if(is_null($data)) return date('Y.m.d H:i:s');
+	if(is_null($data)) return date('Y-m-d H:i:s');
 $data_r 	= explode(' ',$data);
-$data_e 	= explode('.',$data_r[0]);
-$data_e[2] 	= '20'.$data_e[2];
-$data_r[0] 	= implode('.',$data_e);
+$data_e 	= explode('-',$data_r[0]);
+if(strlen($data_e[2])!=4 && strlen($data_e[0])!=4)
+	$data_e[2] 	= '20'.$data_e[2];
+$data_r[0] 	= implode('-',$data_e);
 $data_r 	= implode(' ',$data_r);
 return date('Y-m-d H:i:s',strtotime($data_r) );
 }
+/* Tworzenie $GET zawieraj¹cego POST i GET */
+if( is_array($_REQUEST) ){
+ $GET = $_REQUEST;
+	if( isset($_REQUEST['q']) )
+	@list($GET['plik'], $GET['typ'], $GET['dane'], $GET['costam']) = explode("/" , $_REQUEST['q']);
+	if( isset($GET['data']) )
+	 $GET['data'] = Data($GET['data']);
+	}
+$GET =  aut_null($GET);
