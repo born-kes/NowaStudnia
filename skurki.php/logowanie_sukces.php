@@ -7,12 +7,8 @@ Witam
 <br />
 <br />
 <?php
-if( is_array($_SESSION['url']) ){
-echo '<a href="';
-  foreach($_SESSION['url'] as $get => $w){
-  if($get=='q'){echo $w.'&';continue;}
-  echo $get.'='.$w.'&';}
-  echo '">';?>					Odœwie¿ stronê by kontynuowaæ<br></a>
+if( isset($_SESSION['url']) ){
+echo '<a href="'.$_SESSION['url'].'">';?>					Odœwie¿ stronê by kontynuowaæ<br></a>
 <?php }else{ ?> 
 								Odœwie¿ stronê by kontynuowaæ<br> 
 <?php } ?>

@@ -1,5 +1,5 @@
 <?PHP
- 
+ echo $GET[0];
 function user_id($user){
 
   $query = sql_nazwa($user);
@@ -49,11 +49,12 @@ connection();
 
 switch( checkPass($_POST["user"], $_POST["haslo"]) ){
   case 0:
+	$url =URL();  
+unset($_SESSION['komunikat']);  
     $_SESSION['zalogowany'] = $_POST["user"];
     $_SESSION['id_user'] = user_id($_POST["user"]);
-			if(!empty($_GET)) $_SESSION['url']=$_GET;
-			else $_SESSION['url']=NULL;
-  header("Location:".SERWER_URL);
+	
+  header("Location:".$url);
       break;
   case 1:
     $_SESSION['komunikat'] = "B³¹d serwera. Zalogowanie nie by³o mo¿liwe.";
@@ -67,4 +68,19 @@ switch( checkPass($_POST["user"], $_POST["haslo"]) ){
     $_SESSION['komunikat'] = "B³¹d serwera. Zalogowanie nie by³o mo¿liwe.";
  // header("Location: ".SERWER_URL);
       break;
-}	
+}
+# generuje zapytanie o id usera  
+function sql_nazwa($name){
+	return sql_dopasuj_zap(	array('list_user'	=>'id'),
+					where( array('list_user'=>'name'),$name) 
+				);
+}
+function URL(){
+
+
+global $_GET,$_SESSION;
+if(isSet($_SESSION['url']))return $_SESSION['url'];
+if(!isSet($_GET))return;
+foreach($_GET as $n => $v){if($n==='q'){$str[]=$v;continue;} $str[]=$n.'='.$v;}
+$_SESSION['url']= splaszcz($str,'&');
+}

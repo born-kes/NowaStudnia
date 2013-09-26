@@ -12,11 +12,6 @@ sql_dopasuj_zap(	Arry (Nazwa Tablicy=> NazwaKolumny,NazwaKolumny,...),
 				);
 */
 
-function sql_nazwa($name){
-	return sql_dopasuj_zap(	array('ws_wsi'	=>'id'),
-					where(array(T_USER=>'id'),$name)
-				);
-}
 function sql_query($zap){
 		if(!isset($zap) ) return false;
 	connection();  
