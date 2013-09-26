@@ -91,5 +91,7 @@ if( is_array($_REQUEST) ){
 	@list($GET['plik'], $GET['typ'], $GET['dane'], $GET['costam']) = explode("/" , $_REQUEST['q']);
 	if( isset($GET['data']) )
 	 $GET['data'] = Data($GET['data']);
+	if( isset($_SESSION['id_user']) )
+	 $GET['id_user']=$_SESSION['id_user'];
 	}
 $GET =  aut_null($GET);
