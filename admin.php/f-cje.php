@@ -95,3 +95,12 @@ if( is_array($_REQUEST) ){
 	 $GET['id_user']=$_SESSION['id_user'];
 	}
 $GET =  aut_null($GET);
+# Zwraca TRUE jak s¹ roznice -- sprawdza $a1 w $a2
+function czyJestRoznica($arry1,$arry2){
+ if( is_array($arry1) && is_array($arry2) ){
+	 foreach($arry1 as $n => $v)
+	  if(!isset($arry2[$n]) || czyJestRoznica($arry2[$n],$v) ) return true; //jest ru¿nica
+ }
+if( $arry1!=$arry2 )return true;
+return false;
+}

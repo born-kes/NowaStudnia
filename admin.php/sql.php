@@ -201,7 +201,27 @@ foreach($arry AS $name => $value)
  return splaszcz($array);
 }
 # Function upDate() w bazie aktualizuje tylko datê
-function upDate( $name ){
-return isset($name)?//	return sql_query()
-	zap_Nowy_wpis($name , Array() , false):'';		 
+function upDate( $name ,$arra=Array(),$nowy=false){
+if(! isset($name))
+	return;//	return sql_query()
+return zap_Nowy_wpis($name , $arra , $nowy);	
+// Sam dodaje GET[id] i GET[date]	 
+}
+function upDateRaport($name, $arra=Array() ){
+global $raport,$GET;
+if( !(isset($GET['data']) && Data2Nowsza( $GET['data'],Data() ) ) )return;
+
+ # czy raport w bazie istnieje?
+ if(isset($raport['data_'.$name]) && !is_null($raport['data_'.$name])){
+
+	if( Data2Nowsza($raport['data_'.$name],$GET['data']) && is_array($arra) ){	
+		if( czyJestRoznica($arra,$raport) )
+			upDate( $name ,$arra);
+		else
+			upDate( $name );
+	 }
+
+ }else{
+ return upDate( $name ,$arra,true);
+ }
 }
