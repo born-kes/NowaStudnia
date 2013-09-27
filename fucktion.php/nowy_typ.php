@@ -8,16 +8,16 @@
  *			T: -> Zapisz nowy raport 	=>		zap_Nowy_wpis('typ' , $GET['typ'], false )
  */
 
-if(isset($GET['typ']) && MUR($GET['typ'],7) ){
+if(isset($GET['rodzaj']) && MUR($GET['rodzaj'],7) ){
 
 if(!isset($raport) && isset($GET['id']))
 	$raport = raport((int)$GET['id'] , 'typ');
 
 # -- Kontrola czy zmienimy raport
 	if( upDateRaport('typ' , Array(
-										'typ'	=> (string)$GET['typ']					
+										'typ'	=> (string)$GET['rodzaj']					
 									) 
 					)  
 	  );
 		 
- }else echo 'niema typ';
+ }else echo 'niema rodzaju';
