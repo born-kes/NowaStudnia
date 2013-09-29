@@ -8,14 +8,14 @@
  *			T: -> Zapisz nowy raport 	=>		zap_Nowy_wpis('Zwiad' , $GET['Zwiad'], false )
  */
 
-if(isset($GET['Zwiad']) ){
+if(isset($GET['zwiad']) ){
 
 if(!isset($raport) && isset($GET['id']))
-	$raport = raport((int)$GET['id'] , 'Zwiad');
+	$raport = raport((int)$GET['id'] , 'zwiad');
 
 # -- Kontrola czy zmienimy raport
-	if( upDateRaport('Zwiad' , Array(
-										'Zwiad'	=> (string)$GET['Zwiad']					
+	if( upDateRaport('zwiad' , Array(
+										'zwiad'	=> (string)$GET['zwiad']					
 									) 
 					)  
 	  );
