@@ -6,5 +6,6 @@ php_flag magic_quotes_gpc off
 
 RewriteEngine on
 RewriteRule ^([^.]*)$ /nowaStudnia/index.php?q=$1 [QSA,L]
+RewriteRule ^(.*)\.htm$ /nowaStudnia/index.php?q=$1 [QSA,L]
 #RewriteRule ^([^.]*)$ /nowaStudnia/index.php?q=$1 [QSA,L] dzia³a
-#ErrorDocument 404 /nowaStudnia/index.php
+#ErrorDocument 404 /nowaStudnia/index.php?q=$1 [QSA,L]
