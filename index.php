@@ -12,6 +12,12 @@ define('SKURKI',"skurki.php/");
 										//header('Content-type: text/json');
 										//header('Content-type: application/json');
    }
+   elseif($_GET['q']=='game'){
+define('GAME',"game.php/");
+
+include_once(GAME . "game" . PHP);
+}
+
    else{
 
 	 if( !empty($_POST['user']) ){  		// Pruba logowania
