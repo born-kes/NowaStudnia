@@ -225,3 +225,13 @@ if( !(isset($GET['data']) && Data2Nowsza( $GET['data'],Data() ) ) )return;
  return upDate( $name ,$arra,true);
  }
 }
+function sql_queryArray($zap){$efekt=NULL;
+		if(!isset($zap) ) return false;
+	connection();  
+	$result = mysql_query($zap);
+
+while( $r = @mysql_fetch_array($result) ){
+$efekt[]=$r;
+}
+	return $efekt;
+}
