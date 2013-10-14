@@ -27,7 +27,7 @@ body('kalkulator_game');
 function jednostki($index,$nag³owek = true){
 global $jednostki,$budynki;
 /* sprawdz które jednostki mam wstawiæ 
- *
+ * 
  */
 
 if($nag³owek)
