@@ -36,9 +36,9 @@ define('name' ,' `name` ');
 define('id' ,' `id` ');
  include_once(ADMIN . 'f-cje' . PHP);
 
- include_once(ADMIN . 't' . PHP);
  include_once(ADMIN . 'serw_config' . PHP);
  include_once(ADMIN . 'conect' . PHP);
+ include_once(ADMIN . 't' . PHP);
  include_once(ADMIN . 'head&body' . PHP);
  //connection();
  //destructor();
