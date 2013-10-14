@@ -11,7 +11,50 @@ sql_dopasuj_zap(	Arry (Nazwa Tablicy=> NazwaKolumny,NazwaKolumny,...),
 					)
 				);
 */
-
+/*
+sql_dopasuj_zap(
+				## from i select
+				array( // zmienic nazwa pola data
+					'ws_all'	=>'*'
+					),
+				## where
+				array(
+					where(array('ws_all'=>'id'),$id)
+					),
+				## jonin( Select, polonczenie)
+				array(
+				0=>array(
+					'ws_raport'	=>'*',
+					'ws_mobile'	=>'*',
+					'ws_typ'	=>'*',
+					'ws_mur'	=>'*',
+					'ws_opis'	=>'*',
+					'ws_zwiad'	=>'*',
+					'ws_status'	=>'*'
+					),
+					'ws_raport'	=>'id',
+					'ws_mobile'	=>'id',
+					'ws_typ'	=>'id',
+					'ws_mur'	=>'id',
+					'ws_opis'	=>'id',
+					'ws_zwiad'	=>'id',
+					'ws_status'	=>'id'
+					),
+				## Zap
+					// nie opisana regula
+				);
+	# http://localhost/nowaStudnia/raport/all&id=61
+	return "SELECT ws_all.*,ws_raport.*,ws_mobile.*,ws_typ.*,ws_mur.*,ws_opis.*,ws_zwiad.*,ws_status.* 
+			FROM ws_all 
+			left join ws_raport ON ws_all.id=ws_raport.id 
+			left join ws_mobile ON ws_all.id=ws_mobile.id 
+			left join ws_typ ON ws_all.id=ws_typ.id 
+			left join ws_mur ON ws_all.id=ws_mur.id 
+			left join ws_opis ON ws_all.id=ws_opis.id 
+			left join ws_zwiad ON ws_all.id=ws_zwiad.id 
+			left join ws_status ON ws_all.id=ws_status.id 
+			WHERE ws_all.id=61 "
+ */
 function sql_query($zap){
 		if(!isset($zap) ) return false;
 	connection();  
@@ -29,15 +72,15 @@ function sql_query($zap){
  *
  */
 # pobiera tablice i sp³aszcza j¹ 
-function select($from,$separator=',',$efekt=''){
-if(is_array($from)){
+function select($froms,$separator=',',$efekt=''){
+if(is_array($froms)){
 //Sprawdza czy $from niejest zagniezdzone
 
-	foreach($from AS $from => $select){
+	foreach($froms AS $from => $select){
 	
 		if(is_array($select) ){
 		foreach($select AS $form_one)
-			 $efekt[] = select($form_one,$separator);
+			 $efekt[] = select(array($from=>$form_one),$separator);
 	}else
 	
 		if(!is_numeric($from) )
@@ -47,7 +90,7 @@ if(is_array($from)){
 	}
 	return splaszcz($efekt,$separator);
   }
-  return przedrostek($from,$select);
+  return $froms;//co to jest??!!=> przedrostek($froms,$select);
 }
 # generuje 'left join '.$name.'	ON '.$zaczep.'='.przedrostek( $name,$where)'
 function buduj_left_join($zaczep,$left_join,$str=''){
@@ -68,11 +111,11 @@ function where($argument1, $argument2, $separator='='){
 # Generuje du¿e zapytania
 function sql_dopasuj_zap($from_select,$where, $left_join='',$zap=''){
  if(is_array($from_select) ){
- 	foreach($from_select AS $from => $select)
-		$FROMS[]=$from;	
+ 	foreach($from_select AS $from => $select){
+		$FROMS[]=$from;	}
 	$FROM=splaszcz($FROMS,', ');
 
-	if(is_array($left_join) )
+	if(is_array($left_join) && isset($left_join[0]) )
 		$SELECT=select($from_select+$left_join[0]);
 	else
 		$SELECT=select($from_select);
@@ -80,10 +123,11 @@ $zap=''.
 'SELECT '.$SELECT
  .br.
 'FROM '.$FROM 
- .br.
-buduj_left_join(przedrostek($FROMS[0],'id'),$left_join); 
+ .br;
+ if(isset($left_join[1]) )$zap.= buduj_left_join(przedrostek($FROMS[0],$left_join[1]),$left_join);
+ else $zap.=buduj_left_join(przedrostek($FROMS[0],'id'),$left_join); 
 	
-if(isset($where) ) $zap.= 
+if(isset($where) && !is_NULL($where) ) $zap.= 
 'WHERE '.splaszcz($where,' AND ');
 }
 return $zap;
@@ -225,7 +269,9 @@ if( !(isset($GET['data']) && Data2Nowsza( $GET['data'],Data() ) ) )return;
  return upDate( $name ,$arra,true);
  }
 }
-function sql_queryArray($zap){$efekt=NULL;
+function sql_queryArray($from_select,$where=NULL, $left_join='',$zap=''){
+$zap=sql_dopasuj_zap($from_select,$where, $left_join,$zap);
+$efekt=NULL;
 		if(!isset($zap) ) return false;
 	connection();  
 	$result = mysql_query($zap);
