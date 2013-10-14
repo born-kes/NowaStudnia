@@ -1,5 +1,5 @@
 <?php
-function t($string, $type = ISO88592_TO_UTF8){
+function t($string, $type = 'ISO88592_TO_UTF8'){
 
     $win2utf = array(
       "\xb9" => "\xc4\x85", "\xa5" => "\xc4\x84",
@@ -24,18 +24,18 @@ function t($string, $type = ISO88592_TO_UTF8){
       "\xf1" => "\xc5\x84", "\xd1" => "\xc5\x83"
     );
 
-    if ($type == ISO88592_TO_UTF8)
+    if ($type == 'ISO88592_TO_UTF8')
       return strtr($string, $iso2utf);
-    if ($type == UTF8_TO_ISO88592)
+    if ($type == 'UTF8_TO_ISO88592')
       return strtr($string, array_flip($iso2utf));
-    if ($type == WIN1250_TO_UTF8)
+    if ($type == 'WIN1250_TO_UTF8')
       return strtr($string, $win2utf);
-    if ($type == UTF8_TO_WIN1250)
+    if ($type == 'UTF8_TO_WIN1250')
       return strtr($string, array_flip($win2utf));
-    if ($type == ISO88592_TO_WIN1250)
+    if ($type == 'ISO88592_TO_WIN1250')
       return strtr($string, "\xa1\xa6\xac\xb1\xb6\xbc",
         "\xa5\x8c\x8f\xb9\x9c\x9f");
-    if ($type == WIN1250_TO_ISO88592)
+    if ($type == 'WIN1250_TO_ISO88592')
       return strtr($string, "\xa5\x8c\x8f\xb9\x9c\x9f",
         "\xa1\xa6\xac\xb1\xb6\xbc");
 }
