@@ -1,6 +1,6 @@
 <?php
 function t($string, $type = 'ISO88592_TO_UTF8'){
-
+global $LOCATION,$GET;
     $win2utf = array(
       "\xb9" => "\xc4\x85", "\xa5" => "\xc4\x84",
       "\xe6" => "\xc4\x87", "\xc6" => "\xc4\x86",
@@ -23,7 +23,10 @@ function t($string, $type = 'ISO88592_TO_UTF8'){
       "\xbf" => "\xc5\xbc", "\xaf" => "\xc5\xbb",
       "\xf1" => "\xc5\x84", "\xd1" => "\xc5\x83"
     );
-
+		if(isset($LOCATION['de'][$string])&& isset($LOCATION[$GET['location']][$string]) )
+			$string=$LOCATION[$GET['location']][$string];
+		
+		
     if ($type == 'ISO88592_TO_UTF8')
       return strtr($string, $iso2utf);
     if ($type == 'UTF8_TO_ISO88592')
@@ -38,4 +41,11 @@ function t($string, $type = 'ISO88592_TO_UTF8'){
     if ($type == 'WIN1250_TO_ISO88592')
       return strtr($string, "\xa5\x8c\x8f\xb9\x9c\x9f",
         "\xa1\xa6\xac\xb1\xb6\xbc");
+
 }
+$GET['location']='pl';
+
+$LOCATION =  sql_queryArray(
+				array(	'location'	=>array('de',$GET['location']))	
+				);
+//*/
