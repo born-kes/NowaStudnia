@@ -23,8 +23,8 @@ global $LOCATION,$GET;
       "\xbf" => "\xc5\xbc", "\xaf" => "\xc5\xbb",
       "\xf1" => "\xc5\x84", "\xd1" => "\xc5\x83"
     );
-		if(isset($LOCATION['de'][$string])&& isset($LOCATION[$GET['location']][$string]) )
-			$string=$LOCATION[$GET['location']][$string];
+		if(isset($LOCATION[$string]) )
+			$string=$LOCATION[$string];
 		
 		
     if ($type == 'ISO88592_TO_UTF8')
@@ -45,7 +45,15 @@ global $LOCATION,$GET;
 }
 $GET['location']='pl';
 
-$LOCATION =  sql_queryArray(
+$LOCATION = fuck_pack(
+				sql_queryArray(
 				array(	'location'	=>array('de',$GET['location']))	
-				);
+				)
+			);
+function fuck_pack($local){ global $GET;
+if(is_array($local) )
+foreach($local as $de){
+$efekt[ $de['de'] ] = $de[ $GET['location'] ];
+}return $efekt;
+}
 //*/
